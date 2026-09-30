@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nova Market</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fraunces:wght@600;700&display=swap');
+:root{--ink:#14201a;--muted:#4d5a52;--paper:#f6f7f4;--card:#fff;--line:#cfd6d1;--accent:#0b6b3a;--onaccent:#fff;--err:#b3261e;--dark:#12261d;--fs:16px;--font:"Atkinson Hyperlegible",Verdana,Arial,sans-serif}
+body.hc{--ink:#000;--muted:#000;--paper:#fff;--card:#fff;--line:#000;--accent:#0000b8;--err:#a00000;--dark:#000}
+body.dys{--font:"Atkinson Hyperlegible",Verdana,sans-serif;letter-spacing:.04em;word-spacing:.12em;line-height:1.85}
+*{box-sizing:border-box}
+html{font-size:var(--fs);scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);line-height:1.6}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.15;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid #ffbf00;outline-offset:2px;box-shadow:0 0 0 5px #000}
+.skip{position:absolute;left:8px;top:-60px;background:#000;color:#fff;padding:12px 16px;z-index:200;border-radius:8px}
+.skip:focus{top:8px}
+.wrap{width:min(1120px,calc(100% - 32px));margin:auto}
+.btn{min-height:44px;min-width:44px;border:2px solid var(--ink);background:var(--card);border-radius:10px;padding:8px 16px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;color:var(--ink)}
+.btn.main{background:var(--accent);border-color:var(--accent);color:var(--onaccent)}
+.btn[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.promo{background:var(--dark);color:#fff;font-size:.85rem;text-align:center;padding:8px}
+header{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:2px solid var(--line)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 0}
+.brand{font:700 1.4rem Fraunces,serif;text-decoration:none;color:var(--ink);margin-right:auto}
+.brand b{color:var(--accent)}
+.search{display:flex;gap:6px;flex:1 1 240px;max-width:380px}
+.search input{flex:1;min-width:0;min-height:44px;border:2px solid var(--ink);border-radius:10px;padding:0 12px;background:var(--card)}
+nav.links{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:10px}
+nav.links a{padding:8px 12px;border-radius:8px;font-weight:700;text-decoration:none;color:var(--ink)}
+nav.links a:hover{background:var(--line)}
+select.btn{padding-right:10px}
+.cnt{background:var(--err);color:#fff;border-radius:99px;padding:0 8px;font-size:.8rem}
+section{padding:48px 0}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center;padding:40px 0}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);letter-spacing:-.02em}
+.hero p{font-size:1.15rem;color:var(--muted);max-width:52ch}
+.hero-img{border-radius:24px;overflow:hidden;background:#e8ece9;aspect-ratio:1;display:grid;place-items:center}
+.hero-img img{width:100%;height:100%;object-fit:cover}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0}
+h2{font-size:clamp(1.6rem,4vw,2.3rem);margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;margin-top:20px;list-style:none;padding:0}
+.card{background:var(--card);border:2px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;height:100%}
+.pimg{aspect-ratio:1;background:#eef1ee;display:grid;place-items:center}
+.pimg img{width:100%;height:100%;object-fit:cover}
+.ico{font-size:4rem}
+.pbody{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.pbody h3{font-size:1.1rem;font-family:var(--font)}
+.muted{color:var(--muted);font-size:.92rem}
+.price{font-weight:700;font-size:1.1rem}
+.old{text-decoration:line-through;color:var(--muted);font-weight:400;font-size:.9rem;margin-left:6px}
+.acts{display:flex;gap:8px;margin-top:auto;padding-top:8px}
+.acts .main{flex:1}
+body.easy .desc,body.easy .rating,body.easy .old{display:none}
+body.easy .pbody h3{font-size:1.35rem}
+body.easy .price{font-size:1.4rem}
+body.easy .btn{min-height:56px;font-size:1.1rem}
+body.easy .hero p,body.easy .sub{font-size:1.25rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.panel{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:22px}
+.panel.dk{background:var(--dark);color:#fff;border-color:var(--dark)}
+.f{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.f label{font-weight:700}
+.f input,.f select,.f textarea{min-height:44px;border:2px solid var(--ink);border-radius:10px;padding:8px 12px;background:var(--card);width:100%}
+.f textarea{min-height:110px}
+.f [aria-invalid=true]{border-color:var(--err);background:#fff3f2}
+.err{color:var(--err);font-weight:700;min-height:1.2em}
+.ok{background:#e4f4ea;border:2px solid var(--accent);border-radius:10px;padding:10px 14px;font-weight:700;margin-top:12px}
+.ok:empty{display:none}
+body.hc .ok{background:#fff}
+dialog{border:3px solid var(--ink);border-radius:18px;padding:0;width:min(520px,94vw);max-height:90vh;background:var(--paper);color:var(--ink)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:2px solid var(--line)}
+.db{padding:20px;overflow:auto}
+.ci{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ci .t{width:64px;height:64px;border-radius:10px;background:#eef1ee;display:grid;place-items:center;overflow:hidden}
+.ci img{width:100%;height:100%;object-fit:cover}
+.q{display:flex;gap:8px;align-items:center;margin-top:6px}
+.tot{display:flex;justify-content:space-between;font-size:1.2rem;font-weight:700;margin:16px 0}
+.opt{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#000;color:#fff;padding:12px 20px;border-radius:99px;z-index:300;max-width:92vw;font-weight:700}
+.toast:empty{display:none}
+footer{background:var(--dark);color:#fff;padding:32px 0;margin-top:30px}
+footer a{color:#fff}
+.cl{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:8px}
+.cl li{border:1px solid rgba(255,255,255,.4);border-radius:10px;padding:10px}
+.rm *,.rm{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(max-width:800px){.hero,.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to main content</a>
+<div class="promo" data-i18n="promo">Free delivery over KSh 5,000. M-Pesa accepted.</div>
+
+<header>
+<div class="wrap">
+<div class="bar">
+  <a class="brand" href="#top" aria-label="Nova Market"><b>Nova</b>Market</a>
+  <form class="search" role="search" id="searchForm">
+    <input id="search" type="search" data-ph="search_ph" data-al="search_ph" placeholder="Search products">
+    <button class="btn" type="button" id="voiceBtn" data-al="voice" aria-label="Voice search">🎤</button>
+  </form>
+  <select class="btn" id="langSel" aria-label="Language / Lugha">
+    <option value="en">English</option>
+    <option value="sw">Kiswahili</option>
+  </select>
+  <button class="btn" id="a11yBtn" data-al="a11y" aria-label="Accessibility">♿ <span data-i18n="a11y">Accessibility</span></button>
+  <button class="btn main" id="cartBtn">🛒 <span data-i18n="bag">Bag</span> <span class="cnt" id="count" aria-hidden="true">0</span></button>
+</div>
+<nav class="links" data-al="nav_label" aria-label="Main">
+  <a href="#shop" data-i18n="nav_shop">Shop</a>
+  <a href="#story" data-i18n="nav_story">Our story</a>
+  <a href="#support" data-i18n="nav_help">Support</a>
+  <a href="#sell" data-i18n="nav_sell">Sell</a>
+</nav>
+</div>
+</header>
+
+<main id="main" tabindex="-1">
+<div class="wrap" id="top">
+<section class="hero">
+  <div>
+    <h1 data-i18n="h_title">Good things, well chosen.</h1>
+    <p data-i18n="h_copy">Useful, well-made products for everyday Kenyan life. Clear prices. Clear delivery. Pay with M-Pesa.</p>
+    <div class="row">
+      <a class="btn main" href="#shop" data-i18n="h_cta">Shop now</a>
+      <button class="btn" id="readPage" type="button">🔊 <span data-i18n="listen">Read aloud</span></button>
+    </div>
+  </div>
+  <div class="hero-img"><img id="heroImg" alt="" width="600" height="600"></div>
+</section>
+</div>
+
+<div class="wrap">
+<section id="shop" aria-labelledby="shopT">
+  <h2 id="shopT" data-i18n="shop_t">Shop</h2>
+  <div class="row" role="group" data-al="cat_label" aria-label="Categories" id="cats">
+    <button class="btn" data-cat="All" aria-pressed="true" data-i18n="all">All</button>
+    <button class="btn" data-cat="Tech" aria-pressed="false" data-i18n="c_Tech">Tech</button>
+    <button class="btn" data-cat="Fashion" aria-pressed="false" data-i18n="c_Fashion">Fashion</button>
+    <button class="btn" data-cat="Home" aria-pressed="false" data-i18n="c_Home">Home</button>
+    <button class="btn" data-cat="Lifestyle" aria-pressed="false" data-i18n="c_Lifestyle">Lifestyle</button>
+    <label class="muted" for="sort" data-i18n="sort">Sort by</label>
+    <select class="btn" id="sort">
+      <option value="f" data-i18n="s_f">Featured</option>
+      <option value="l" data-i18n="s_l">Price: low to high</option>
+      <option value="h" data-i18n="s_h">Price: high to low</option>
+      <option value="r" data-i18n="s_r">Top rated</option>
+    </select>
+  </div>
+  <p class="muted" id="resultInfo" aria-live="polite"></p>
+  <ul class="grid" id="grid"></ul>
+</section>
+
+<section id="story" class="two" aria-labelledby="storyT">
+  <div class="panel dk">
+    <h2 id="storyT" data-i18n="story_t">Less noise. More good stuff.</h2>
+    <p data-i18n="story_p">Shopping online should be easy. Every product here is chosen for being useful and well made. We show the price, the delivery cost and the return rules before you pay.</p>
+  </div>
+  <div class="panel">
+    <h2 data-i18n="promise_t">Our promise</h2>
+    <ul>
+      <li data-i18n="p1">Delivery in 24 to 48 hours in major towns</li>
+      <li data-i18n="p2">14 days to return eligible items</li>
+      <li data-i18n="p3">Pay with M-Pesa</li>
+      <li data-i18n="p4">A real person answers support requests</li>
+    </ul>
+  </div>
+</section>
+
+<section id="support" class="two" aria-labelledby="supT">
+  <div class="panel">
+    <h2 id="supT" data-i18n="sup_t">Report a problem</h2>
+    <p class="muted" data-i18n="sup_p">Tell us what went wrong. You will get a reference number.</p>
+    <form id="cForm" novalidate>
+      <div class="f"><label for="cName" data-i18n="l_name">Full name</label><input id="cName" autocomplete="name" required aria-describedby="cNameE"><span class="err" id="cNameE"></span></div>
+      <div class="f"><label for="cPhone" data-i18n="l_phone">Phone number</label><input id="cPhone" type="tel" inputmode="tel" autocomplete="tel" required aria-describedby="cPhoneE"><span class="err" id="cPhoneE"></span></div>
+      <div class="f"><label for="cType" data-i18n="l_issue">Type of problem</label>
+        <select id="cType" required aria-describedby="cTypeE">
+          <option value="" data-i18n="choose">Choose</option>
+          <option value="delivery" data-i18n="i_delivery">Delivery problem</option>
+          <option value="damaged" data-i18n="i_damaged">Damaged product</option>
+          <option value="wrong" data-i18n="i_wrong">Wrong item</option>
+          <option value="payment" data-i18n="i_payment">Payment problem</option>
+          <option value="refund" data-i18n="i_refund">Refund request</option>
+          <option value="other" data-i18n="i_other">Other</option>
+        </select><span class="err" id="cTypeE"></span></div>
+      <div class="f"><label for="cMsg" data-i18n="l_what">What happened?</label><textarea id="cMsg" required aria-describedby="cMsgE"></textarea><span class="err" id="cMsgE"></span></div>
+      <button class="btn main" type="submit" data-i18n="send">Send</button>
+      <div class="ok" id="cOk" role="status"></div>
+    </form>
+  </div>
+  <div class="panel dk">
+    <h2 data-i18n="next_t">What happens next</h2>
+    <ol>
+      <li data-i18n="n1">We record your case and give you a reference number.</li>
+      <li data-i18n="n2">Our support team reviews it.</li>
+      <li data-i18n="n3">We contact you. Quote your reference number.</li>
+    </ol>
+    <ul class="cl" id="cList" aria-label="Your recent reports"></ul>
+  </div>
+</section>
+
+<section id="sell" aria-labelledby="sellT">
+  <div class="panel">
+    <h2 id="sellT" data-i18n="sell_t">Sell on Nova Market</h2>
+    <p class="muted" data-i18n="sell_p">Add a product. In this demo it is saved in this browser only.</p>
+    <form id="pForm" novalidate>
+      <div class="f"><label for="pName" data-i18n="l_pname">Product name</label><input id="pName" required aria-describedby="pNameE"><span class="err" id="pNameE"></span></div>
+      <div class="f"><label for="pCat" data-i18n="l_cat">Category</label>
+        <select id="pCat" required aria-describedby="pCatE">
+          <option value="" data-i18n="choose">Choose</option>
+          <option value="Tech" data-i18n="c_Tech">Tech</option><option value="Fashion" data-i18n="c_Fashion">Fashion</option>
+          <option value="Home" data-i18n="c_Home">Home</option><option value="Lifestyle" data-i18n="c_Lifestyle">Lifestyle</option>
+        </select><span class="err" id="pCatE"></span></div>
+      <div class="f"><label for="pPrice" data-i18n="l_price">Price (KSh)</label><input id="pPrice" type="number" min="1" inputmode="numeric" required aria-describedby="pPriceE"><span class="err" id="pPriceE"></span></div>
+      <div class="f"><label for="pDesc" data-i18n="l_desc">Description</label><textarea id="pDesc" required aria-describedby="pDescE"></textarea><span class="err" id="pDescE"></span></div>
+      <div class="f"><label for="pImg" data-i18n="l_img">Photo (JPG, PNG or WebP, up to 1 MB)</label><input id="pImg" type="file" accept="image/png,image/jpeg,image/webp" required aria-describedby="pImgE"><span class="err" id="pImgE"></span></div>
+      <button class="btn main" type="submit" data-i18n="add_p">Add product</button>
+      <div class="ok" id="pOk" role="status"></div>
+    </form>
+  </div>
+</section>
+</div>
+</main>
+
+<footer><div class="wrap">
+  <p><strong>Nova Market</strong> · hello@novamarket.example</p>
+  <p class="muted" style="color:#c9d3cd" data-i18n="foot">Demo product photos from Pexels. Replace with licensed photos before launch.</p>
+</div></footer>
+
+<!-- Cart -->
+<dialog id="cartD" aria-labelledby="cartT">
+  <div class="dh"><h2 id="cartT" style="margin:0" data-i18n="bag_t">Your bag</h2><button class="btn" data-close aria-label="Close" data-al="close">✕</button></div>
+  <div class="db"><div id="items"></div>
+    <div class="tot"><span data-i18n="sub">Subtotal</span><span id="total">KSh 0</span></div>
+    <button class="btn main" id="goPay" style="width:100%" data-i18n="checkout">Checkout</button>
+  </div>
+</dialog>
+
+<!-- Checkout -->
+<dialog id="payD" aria-labelledby="payT">
+  <div class="dh"><h2 id="payT" style="margin:0" data-i18n="pay_t">Pay with M-Pesa</h2><button class="btn" data-close aria-label="Close" data-al="close">✕</button></div>
+  <div class="db">
+    <form id="payForm" novalidate>
+      <div class="f"><label for="oName" data-i18n="l_name">Full name</label><input id="oName" autocomplete="name" required aria-describedby="oNameE"><span class="err" id="oNameE"></span></div>
+      <div class="f"><label for="oPhone" data-i18n="l_mpesa">M-Pesa phone number</label><input id="oPhone" type="tel" inputmode="tel" placeholder="0712 345 678" autocomplete="tel" required aria-describedby="oPhoneE"><span class="err" id="oPhoneE"></span></div>
+      <div class="f"><label for="oAddr" data-i18n="l_addr">Delivery address (town, estate, street)</label><textarea id="oAddr" required aria-describedby="oAddrE"></textarea><span class="err" id="oAddrE"></span></div>
+      <button class="btn main" type="submit" style="width:100%" data-i18n="pay">Pay now</button>
+      <p class="muted" data-i18n="demo_pay">Demo only. Connect your M-Pesa backend to send a real payment request.</p>
+      <div class="ok" id="payOk" role="status"></div>
+    </form>
+  </div>
+</dialog>
+
+<!-- Accessibility -->
+<dialog id="aD" aria-labelledby="aT">
+  <div class="dh"><h2 id="aT" style="margin:0" data-i18n="a11y">Accessibility</h2><button class="btn" data-close aria-label="Close" data-al="close">✕</button></div>
+  <div class="db">
+    <div class="opt"><span data-i18n="a_size">Text size</span>
+      <span class="row" style="margin:0"><button class="btn" id="sizeDn" aria-label="Smaller text" data-al="a_smaller">A−</button><button class="btn" id="sizeUp" aria-label="Larger text" data-al="a_larger">A+</button></span></div>
+    <div class="opt"><span data-i18n="a_hc">High contrast</span><button class="btn" id="tHc" aria-pressed="false"></button></div>
+    <div class="opt"><span data-i18n="a_dys">Easy-to-read font and spacing</span><button class="btn" id="tDys" aria-pressed="false"></button></div>
+    <div class="opt"><span data-i18n="a_easy">Simple view (fewer details, bigger buttons)</span><button class="btn" id="tEasy" aria-pressed="false"></button></div>
+    <div class="opt"><span data-i18n="a_rm">Stop animations</span><button class="btn" id="tRm" aria-pressed="false"></button></div>
+    <div class="opt"><span data-i18n="a_auto">Read new pages aloud automatically</span><button class="btn" id="tAuto" aria-pressed="false"></button></div>
+    <p class="muted" data-i18n="a_note">You can use the whole store with the keyboard: Tab to move, Enter or Space to press, Esc to close windows.</p>
+    <button class="btn" id="aReset" data-i18n="a_reset">Reset all</button>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
+
+/* ---------- Translations ---------- */
+const T={
+en:{skip:"Skip to main content",promo:"Free delivery over KSh 5,000. M-Pesa accepted.",search_ph:"Search products",voice:"Search by voice",a11y:"Accessibility",bag:"Bag",nav_label:"Main",nav_shop:"Shop",nav_story:"Our story",nav_help:"Support",nav_sell:"Sell",
+h_title:"Good things, well chosen.",h_copy:"Useful, well-made products for everyday Kenyan life. Clear prices. Clear delivery. Pay with M-Pesa.",h_cta:"Shop now",listen:"Read aloud",
+shop_t:"Shop",cat_label:"Categories",all:"All",c_Tech:"Tech",c_Fashion:"Fashion",c_Home:"Home",c_Lifestyle:"Lifestyle",sort:"Sort by",s_f:"Featured",s_l:"Price: low to high",s_h:"Price: high to low",s_r:"Top rated",
+add:"Add to bag",added:"added to your bag",reviews:"reviews",stars:"out of 5 stars",none:"No products found. Try another word or choose All.",found:"products shown",listenP:"Listen",free:"Free delivery over KSh 5,000",
+story_t:"Less noise. More good stuff.",story_p:"Shopping online should be easy. Every product here is chosen for being useful and well made. We show the price, the delivery cost and the return rules before you pay.",promise_t:"Our promise",p1:"Delivery in 24 to 48 hours in major towns",p2:"14 days to return eligible items",p3:"Pay with M-Pesa",p4:"A real person answers support requests",
+sup_t:"Report a problem",sup_p:"Tell us what went wrong. You will get a reference number.",l_name:"Full name",l_phone:"Phone number",l_issue:"Type of problem",choose:"Choose",i_delivery:"Delivery problem",i_damaged:"Damaged product",i_wrong:"Wrong item",i_payment:"Payment problem",i_refund:"Refund request",i_other:"Other",l_what:"What happened?",send:"Send",
+next_t:"What happens next",n1:"We record your case and give you a reference number.",n2:"Our support team reviews it.",n3:"We contact you. Quote your reference number.",recent:"Your recent reports",
+sell_t:"Sell on Nova Market",sell_p:"Add a product. In this demo it is saved in this browser only.",l_pname:"Product name",l_cat:"Category",l_price:"Price (KSh)",l_desc:"Description",l_img:"Photo (JPG, PNG or WebP, up to 1 MB)",add_p:"Add product",
+foot:"Demo product photos from Pexels. Replace with licensed photos before launch.",bag_t:"Your bag",sub:"Subtotal",checkout:"Checkout",empty:"Your bag is empty. Add a product to start.",remove:"Remove",close:"Close",
+pay_t:"Pay with M-Pesa",l_mpesa:"M-Pesa phone number",l_addr:"Delivery address (town, estate, street)",pay:"Pay now",demo_pay:"Demo only. Connect your M-Pesa backend to send a real payment request.",
+a_size:"Text size",a_smaller:"Smaller text",a_larger:"Larger text",a_hc:"High contrast",a_dys:"Easy-to-read font and spacing",a_easy:"Simple view (fewer details, bigger buttons)",a_rm:"Stop animations",a_auto:"Read new pages aloud automatically",a_note:"You can use the whole store with the keyboard: Tab to move, Enter or Space to press, Esc to close windows.",a_reset:"Reset all",on:"On",off:"Off",
+e_req:"This field is required.",e_short:"Please write at least 10 characters.",e_phone:"Enter a Kenyan phone number, like 0712 345 678.",e_price:"Enter a price above 0.",e_img:"Choose a JPG, PNG or WebP photo.",e_big:"The photo is too big. Use one under 1 MB.",e_store:"Could not save. Browser storage is full.",
+c_ok:"Report sent. Your reference number is",p_ok:"added to the shop.",o_ok:"Order saved. M-Pesa payment request would be sent to",toast_rm:"Removed from bag",bagn:"items in bag",
+v_none:"Voice search is not supported in this browser.",v_listen:"Listening…",v_err:"Sorry, I could not hear that.",tts_none:"Read aloud is not supported in this browser.",lang_set:"Language: English",received:"Received"},
+sw:{skip:"Ruka hadi maudhui makuu",promo:"Usafirishaji bila malipo kwa zaidi ya KSh 5,000. M-Pesa inakubaliwa.",search_ph:"Tafuta bidhaa",voice:"Tafuta kwa sauti",a11y:"Ufikivu",bag:"Kikapu",nav_label:"Menyu kuu",nav_shop:"Duka",nav_story:"Hadithi yetu",nav_help:"Msaada",nav_sell:"Uza",
+h_title:"Vitu vizuri, vilivyochaguliwa kwa makini.",h_copy:"Bidhaa muhimu na bora kwa maisha ya kila siku ya Kenya. Bei wazi. Usafirishaji wazi. Lipa kwa M-Pesa.",h_cta:"Nunua sasa",listen:"Soma kwa sauti",
+shop_t:"Duka",cat_label:"Aina za bidhaa",all:"Zote",c_Tech:"Teknolojia",c_Fashion:"Mitindo",c_Home:"Nyumbani",c_Lifestyle:"Maisha",sort:"Panga kwa",s_f:"Zilizochaguliwa",s_l:"Bei: chini hadi juu",s_h:"Bei: juu hadi chini",s_r:"Zilizokadiriwa juu",
+add:"Weka kwenye kikapu",added:"imewekwa kwenye kikapu chako",reviews:"maoni",stars:"kati ya nyota 5",none:"Hakuna bidhaa zilizopatikana. Jaribu neno lingine au chagua Zote.",found:"bidhaa zinaonyeshwa",listenP:"Sikiliza",free:"Usafirishaji bila malipo zaidi ya KSh 5,000",
+story_t:"Kelele kidogo. Vitu vizuri zaidi.",story_p:"Kununua mtandaoni kunapaswa kuwa rahisi. Kila bidhaa hapa imechaguliwa kwa sababu ni muhimu na imetengenezwa vizuri. Tunaonyesha bei, gharama ya usafirishaji na sheria za kurejesha kabla hujalipa.",promise_t:"Ahadi yetu",p1:"Usafirishaji ndani ya saa 24 hadi 48 katika miji mikuu",p2:"Siku 14 za kurejesha bidhaa zinazostahili",p3:"Lipa kwa M-Pesa",p4:"Mtu halisi hujibu maombi ya msaada",
+sup_t:"Ripoti tatizo",sup_p:"Tuambie kilichoharibika. Utapewa nambari ya kumbukumbu.",l_name:"Jina kamili",l_phone:"Nambari ya simu",l_issue:"Aina ya tatizo",choose:"Chagua",i_delivery:"Tatizo la usafirishaji",i_damaged:"Bidhaa iliyoharibika",i_wrong:"Bidhaa isiyo sahihi",i_payment:"Tatizo la malipo",i_refund:"Ombi la kurejeshewa pesa",i_other:"Nyingine",l_what:"Nini kilitokea?",send:"Tuma",
+next_t:"Nini kinafuata",n1:"Tunaandika kesi yako na kukupa nambari ya kumbukumbu.",n2:"Timu yetu ya msaada inaipitia.",n3:"Tunakupigia. Taja nambari yako ya kumbukumbu.",recent:"Ripoti zako za hivi karibuni",
+sell_t:"Uza kwenye Nova Market",sell_p:"Ongeza bidhaa. Katika onyesho hili huhifadhiwa kwenye kivinjari hiki tu.",l_pname:"Jina la bidhaa",l_cat:"Aina",l_price:"Bei (KSh)",l_desc:"Maelezo",l_img:"Picha (JPG, PNG au WebP, hadi MB 1)",add_p:"Ongeza bidhaa",
+foot:"Picha za onyesho kutoka Pexels. Badilisha na picha zenye leseni kabla ya kuzindua.",bag_t:"Kikapu chako",sub:"Jumla ndogo",checkout:"Endelea kulipa",empty:"Kikapu chako ni tupu. Ongeza bidhaa ili kuanza.",remove:"Ondoa",close:"Funga",
+pay_t:"Lipa kwa M-Pesa",l_mpesa:"Nambari ya simu ya M-Pesa",l_addr:"Anwani ya kupelekewa (mji, mtaa, barabara)",pay:"Lipa sasa",demo_pay:"Ni onyesho tu. Unganisha mfumo wako wa M-Pesa ili kutuma ombi halisi la malipo.",
+a_size:"Ukubwa wa maandishi",a_smaller:"Maandishi madogo",a_larger:"Maandishi makubwa",a_hc:"Utofautishaji wa juu",a_dys:"Herufi na nafasi rahisi kusoma",a_easy:"Muonekano rahisi (maelezo machache, vitufe vikubwa)",a_rm:"Zima mwendo",a_auto:"Soma kurasa mpya kwa sauti kiotomatiki",a_note:"Unaweza kutumia duka lote kwa kibodi: Tab kusogea, Enter au Space kubonyeza, Esc kufunga madirisha.",a_reset:"Rudisha zote",on:"Imewashwa",off:"Imezimwa",
+e_req:"Sehemu hii inahitajika.",e_short:"Tafadhali andika angalau herufi 10.",e_phone:"Weka nambari ya simu ya Kenya, kama 0712 345 678.",e_price:"Weka bei zaidi ya 0.",e_img:"Chagua picha ya JPG, PNG au WebP.",e_big:"Picha ni kubwa mno. Tumia iliyo chini ya MB 1.",e_store:"Imeshindwa kuhifadhi. Hifadhi ya kivinjari imejaa.",
+c_ok:"Ripoti imetumwa. Nambari yako ya kumbukumbu ni",p_ok:"imeongezwa kwenye duka.",o_ok:"Oda imehifadhiwa. Ombi la malipo ya M-Pesa lingetumwa kwa",toast_rm:"Imeondolewa kwenye kikapu",bagn:"bidhaa kwenye kikapu",
+v_none:"Kivinjari hiki hakiauni kutafuta kwa sauti.",v_listen:"Nasikiliza…",v_err:"Samahani, sikusikia vizuri.",tts_none:"Kivinjari hiki hakiauni kusoma kwa sauti.",lang_set:"Lugha: Kiswahili",received:"Imepokelewa"}
+};
+let lang=store.get('nm-lang','en'); if(!T[lang])lang='en';
+const t=k=>T[lang][k]??T.en[k]??k;
+
+/* ---------- Products ---------- */
+const P=[
+{id:1,name:"Aero Pro Wireless Headphones",cat:"Tech",price:8999,old:10999,rating:4.9,n:128,icon:"🎧",img:"https://images.pexels.com/photos/3394665/pexels-photo-3394665.jpeg?auto=compress&cs=tinysrgb&w=800",d:{en:"Noise cancelling with a 40-hour battery.",sw:"Hupunguza kelele, betri ya saa 40."}},
+{id:2,name:"Orbit S2 Smartwatch",cat:"Tech",price:12499,old:14999,rating:4.8,n:94,icon:"⌚",img:"https://images.pexels.com/photos/12307366/pexels-photo-12307366.jpeg?auto=compress&cs=tinysrgb&w=800",d:{en:"Bright screen and fitness tracking.",sw:"Skrini angavu na ufuatiliaji wa mazoezi."}},
+{id:3,name:"Cloud Runner 02",cat:"Fashion",price:6999,old:8499,rating:4.8,n:76,icon:"👟",img:"https://images.pexels.com/photos/4252969/pexels-photo-4252969.jpeg?auto=compress&cs=tinysrgb&w=800",d:{en:"Light, cushioned everyday sneakers.",sw:"Viatu vyepesi na laini vya kila siku."}},
+{id:4,name:"Kivu Leather Crossbody",cat:"Fashion",price:7499,old:8999,rating:4.9,n:61,icon:"👜",img:"",d:{en:"Leather bag with an adjustable strap.",sw:"Mfuko wa ngozi wenye mkanda unaorekebishwa."}},
+{id:5,name:"Sienna Ceramic Coffee Set",cat:"Home",price:4599,old:5499,rating:4.9,n:112,icon:"☕",img:"https://images.pexels.com/photos/6312175/pexels-photo-6312175.jpeg?auto=compress&cs=tinysrgb&w=800",d:{en:"Four hand-finished stoneware cups.",sw:"Vikombe vinne vya udongo vilivyokamilishwa kwa mkono."}},
+{id:6,name:"Halo Ambient Table Lamp",cat:"Home",price:5299,old:null,rating:4.7,n:43,icon:"💡",img:"https://images.pexels.com/photos/3859780/pexels-photo-3859780.jpeg?auto=compress&cs=tinysrgb&w=800",d:{en:"Warm lamp with adjustable brightness.",sw:"Taa ya joto yenye mwanga unaorekebishwa."}},
+{id:7,name:"Hydra Steel Bottle 750ml",cat:"Lifestyle",price:2499,old:2999,rating:4.8,n:87,icon:"🧴",img:"https://images.pexels.com/photos/7879984/pexels-photo-7879984.jpeg?auto=compress&cs=tinysrgb&w=800",d:{en:"Keeps drinks cold for hours.",sw:"Huweka vinywaji baridi kwa saa nyingi."}},
+{id:8,name:"Atlas Weekender",cat:"Lifestyle",price:8999,old:10499,rating:4.9,n:39,icon:"🧳",img:"https://images.pexels.com/photos/1058959/pexels-photo-1058959.jpeg?auto=compress&cs=tinysrgb&w=800",d:{en:"Roomy canvas and leather travel bag.",sw:"Mfuko mkubwa wa safari wa turubai na ngozi."}}
+];
+P.push(...store.get('nm-added',[]));
+const money=n=>"KSh "+Number(n).toLocaleString("en-KE");
+const pd=p=>typeof p.d==='string'?p.d:(p.d[lang]||p.d.en);
+const AK={1:'head',2:'watch',3:'shoe',4:'bag',5:'cups',6:'lamp',7:'bottle',8:'duffel'};
+const ART={
+head:['#e8e4f5','<path d="M110 250v-50a90 90 0 0 1 180 0v50" fill="none" stroke="#2b2540" stroke-width="16" stroke-linecap="round"/><rect x="84" y="235" width="52" height="95" rx="22" fill="#4b3f7a"/><rect x="264" y="235" width="52" height="95" rx="22" fill="#4b3f7a"/><rect x="96" y="255" width="16" height="55" rx="8" fill="#a88bff"/><rect x="288" y="255" width="16" height="55" rx="8" fill="#a88bff"/>'],
+watch:['#dfeaf7','<rect x="170" y="50" width="60" height="300" rx="20" fill="#26344d"/><rect x="128" y="128" width="144" height="144" rx="38" fill="#101827"/><rect x="144" y="144" width="112" height="112" rx="28" fill="#3d7bd9"/><path d="M200 200v-38M200 200l24 14" stroke="#fff" stroke-width="7" stroke-linecap="round"/><rect x="272" y="182" width="9" height="34" rx="4" fill="#101827"/>'],
+shoe:['#fbe3da','<path d="M64 262C64 196 108 176 150 170l42 36c40 10 110 14 146 48v16H64z" fill="#e8674a"/><path d="M150 170l-10 -22 40 -8 24 42" fill="#c94e33"/><rect x="58" y="262" width="288" height="30" rx="15" fill="#fff" stroke="#2a1a15" stroke-width="5"/><path d="M180 196l16 -14M206 208l16 -14M232 216l16 -14" stroke="#fff" stroke-width="7" stroke-linecap="round"/>'],
+bag:['#efe2d0','<path d="M128 180C128 60 272 60 272 180" fill="none" stroke="#5c3a1f" stroke-width="14"/><rect x="96" y="170" width="208" height="150" rx="24" fill="#8a5a34"/><path d="M96 194h208v34q-104 52-208 0z" fill="#a26b3f"/><circle cx="200" cy="246" r="13" fill="#d4a94a"/><path d="M110 300h180" stroke="#6b431f" stroke-width="4" stroke-dasharray="8 6"/>'],
+cups:['#f6ecd9','<ellipse cx="200" cy="310" rx="150" ry="20" fill="#d9c7a6"/><path d="M80 170h100v46a50 50 0 0 1-100 0z" fill="#c98a5f"/><path d="M220 170h100v46a50 50 0 0 1-100 0z" fill="#b57448"/><path d="M180 186h26a20 20 0 0 1 0 40h-24M320 186h26a20 20 0 0 1 0 40h-24" fill="none" stroke="#c98a5f" stroke-width="10"/><ellipse cx="130" cy="170" rx="50" ry="9" fill="#5b3a24"/><ellipse cx="270" cy="170" rx="50" ry="9" fill="#5b3a24"/>'],
+lamp:['#fbefcf','<circle cx="200" cy="180" r="130" fill="#ffe08a" opacity=".45"/><path d="M140 110h120l34 110H106z" fill="#e5a642"/><rect x="191" y="220" width="18" height="76" fill="#5a4630"/><ellipse cx="200" cy="306" rx="72" ry="15" fill="#5a4630"/>'],
+bottle:['#dcf3ea','<rect x="168" y="60" width="64" height="38" rx="10" fill="#1f3d36"/><rect x="180" y="96" width="40" height="24" fill="#2c574d"/><rect x="146" y="118" width="108" height="222" rx="34" fill="#3fae93"/><rect x="146" y="196" width="108" height="26" fill="#fff" opacity=".5"/><rect x="164" y="136" width="14" height="150" rx="7" fill="#fff" opacity=".35"/>'],
+duffel:['#dbe9e0','<path d="M140 190C150 110 250 110 260 190" fill="none" stroke="#2d4a3b" stroke-width="14"/><rect x="62" y="180" width="276" height="140" rx="56" fill="#4c7a63"/><rect x="62" y="238" width="276" height="16" fill="#2d4a3b"/><rect x="150" y="214" width="100" height="62" rx="14" fill="#a26b3f"/><circle cx="200" cy="245" r="9" fill="#d4a94a"/>'],
+box:['#e8ece9','<path d="M200 90l120 60v110l-120 60-120-60V150z" fill="#c9a47c"/><path d="M200 90l120 60-120 60-120-60z" fill="#dfc29f"/><path d="M200 210v110" stroke="#a9835c" stroke-width="6"/>']
+};
+const artUri=k=>{const a=ART[k]||ART.box;return 'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" fill="'+a[0]+'"/>'+a[1]+'</svg>')};
+window.fb=i=>{i.onerror=null;i.src=artUri(i.dataset.a)};
+const imgTag=(p,alt)=>`<img src="${esc(p.img||artUri(AK[p.id]))}" alt="${alt?esc(p.name):''}" data-a="${AK[p.id]||'box'}" loading="lazy" onerror="fb(this)">`;
+
+let cat="All",q="",cart=store.get('nm-cart',[]);
+
+/* ---------- Render ---------- */
+function render(){
+  let l=P.filter(p=>(cat==="All"||p.cat===cat)&&(p.name+" "+t('c_'+p.cat)+" "+p.cat).toLowerCase().includes(q.toLowerCase()));
+  const s=$('sort').value;
+  if(s==='l')l.sort((a,b)=>a.price-b.price);
+  if(s==='h')l.sort((a,b)=>b.price-a.price);
+  if(s==='r')l.sort((a,b)=>b.rating-a.rating);
+  $('grid').innerHTML=l.map(p=>`<li><article class="card"><div class="pimg">${imgTag(p,true)}</div><div class="pbody">
+    <span class="muted">${esc(t('c_'+p.cat))}</span><h3>${esc(p.name)}</h3><p class="muted desc">${esc(pd(p))}</p>
+    <p class="muted rating" aria-label="${p.rating} ${t('stars')}, ${p.n} ${t('reviews')}">★ ${p.rating} (${p.n} ${t('reviews')})</p>
+    <p class="price">${money(p.price)}${p.old?`<span class="old"><span class="sr" hidden></span>${money(p.old)}</span>`:''}</p>
+    <div class="acts"><button class="btn main" data-add="${p.id}" aria-label="${t('add')}: ${esc(p.name)}, ${money(p.price)}">＋ ${t('add')}</button>
+    <button class="btn" data-say="${p.id}" aria-label="${t('listenP')}: ${esc(p.name)}">🔊</button></div></div></article></li>`).join("");
+  $('resultInfo').textContent=l.length?`${l.length} ${t('found')}`:t('none');
+}
+function cartItems(){return cart.map(x=>{const p=P.find(p=>p.id===x.id);return p&&{...p,qty:x.qty}}).filter(Boolean)}
+function renderCart(){
+  const it=cartItems(),tot=it.reduce((s,p)=>s+p.price*p.qty,0),n=it.reduce((s,p)=>s+p.qty,0);
+  $('count').textContent=n;$('cartBtn').setAttribute('aria-label',`${t('bag')}: ${n} ${t('bagn')}`);$('total').textContent=money(tot);
+  $('items').innerHTML=it.length?it.map(p=>`<div class="ci"><div class="t">${imgTag(p,false)}</div><div><strong>${esc(p.name)}</strong><br><span class="muted">${money(p.price)}</span>
+   <div class="q"><button class="btn" data-q="${p.id}" data-d="-1" aria-label="−1 ${esc(p.name)}">−</button><span aria-live="polite">${p.qty}</span><button class="btn" data-q="${p.id}" data-d="1" aria-label="+1 ${esc(p.name)}">+</button></div></div>
+   <button class="btn" data-r="${p.id}" aria-label="${t('remove')}: ${esc(p.name)}">${t('remove')}</button></div>`).join(""):`<p>${t('empty')}</p>`;
+}
+function renderComplaints(){
+  const c=store.get('nm-complaints',[]);
+  $('cList').innerHTML=c.map(x=>`<li><strong>${esc(x.ref)}</strong> · ${esc(t('i_'+x.type))}<br>${esc(x.date)} · ${t('received')}</li>`).join("");
+  $('cList').hidden=!c.length;
+}
+
+/* ---------- i18n apply ---------- */
+function applyI18n(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
+  document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=t(e.dataset.ph));
+  document.querySelectorAll('[data-al]').forEach(e=>e.setAttribute('aria-label',t(e.dataset.al)));
+  $('langSel').value=lang;syncToggles();render();renderCart();renderComplaints();
+}
+$('langSel').onchange=e=>{lang=e.target.value;store.set('nm-lang',lang);applyI18n();toast(t('lang_set'));if(A.auto)speak(document.querySelector('h1').textContent)};
+
+/* ---------- Accessibility settings ---------- */
+const A=Object.assign({size:1,hc:false,dys:false,easy:false,rm:false,auto:false},store.get('nm-a11y',{}));
+function applyA(){
+  document.documentElement.style.setProperty('--fs',(16*A.size)+'px');
+  document.body.classList.toggle('hc',A.hc);document.body.classList.toggle('dys',A.dys);
+  document.body.classList.toggle('easy',A.easy);document.documentElement.classList.toggle('rm',A.rm);
+  store.set('nm-a11y',A);syncToggles();
+}
+function syncToggles(){
+  [['tHc','hc'],['tDys','dys'],['tEasy','easy'],['tRm','rm'],['tAuto','auto']].forEach(([id,k])=>{const b=$(id);b.setAttribute('aria-pressed',A[k]);b.textContent=A[k]?t('on'):t('off')});
+}
+[['tHc','hc'],['tDys','dys'],['tEasy','easy'],['tRm','rm'],['tAuto','auto']].forEach(([id,k])=>$(id).onclick=()=>{A[k]=!A[k];applyA()});
+$('sizeUp').onclick=()=>{A.size=Math.min(1.6,+(A.size+.15).toFixed(2));applyA()};
+$('sizeDn').onclick=()=>{A.size=Math.max(.9,+(A.size-.15).toFixed(2));applyA()};
+$('aReset').onclick=()=>{Object.assign(A,{size:1,hc:false,dys:false,easy:false,rm:false,auto:false});applyA()};
+if(window.matchMedia&&matchMedia('(prefers-contrast: more)').matches&&!localStorage.getItem('nm-a11y'))A.hc=true;
+
+/* ---------- Speech ---------- */
+function speak(text){
+  if(!('speechSynthesis' in window))return toast(t('tts_none'));
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);
+  u.lang=lang==='sw'?'sw-KE':'en-KE';
+  const v=speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith(lang));if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+$('readPage').onclick=()=>speak(document.querySelector('h1').textContent+". "+document.querySelector('.hero p').textContent);
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+$('voiceBtn').onclick=()=>{
+  if(!SR)return toast(t('v_none'));
+  const r=new SR();r.lang=lang==='sw'?'sw-KE':'en-KE';r.onresult=e=>{q=e.results[0][0].transcript;$('search').value=q;render()};
+  r.onerror=()=>toast(t('v_err'));r.start();toast(t('v_listen'));
+};
+
+/* ---------- Helpers ---------- */
+let tt;function toast(m){const e=$('toast');e.textContent='';setTimeout(()=>e.textContent=m,30);clearTimeout(tt);tt=setTimeout(()=>e.textContent='',3500)}
+function saveCart(){store.set('nm-cart',cart);renderCart()}
+function addCart(id){const x=cart.find(i=>i.id===id);x?x.qty++:cart.push({id,qty:1});saveCart();const p=P.find(p=>p.id===id);toast(`${p.name} ${t('added')}`)}
+function fieldErr(id,msg){const i=$(id),e=$(id+'E');e.textContent=msg||'';msg?i.setAttribute('aria-invalid','true'):i.removeAttribute('aria-invalid');return !msg}
+function need(id,min){const v=$(id).value.trim();return fieldErr(id,!v?t('e_req'):(min&&v.length<min?t('e_short'):''))}
+const phoneOk=v=>/^(?:\+?254|0)([17]\d{8})$/.test(v.replace(/[\s-]/g,''));
+function firstBad(ids){const f=ids.find(id=>$(id).getAttribute('aria-invalid')==='true');if(f)$(f).focus();return !f}
+
+/* ---------- Events ---------- */
+$('grid').onclick=e=>{const a=e.target.closest('[data-add]'),s=e.target.closest('[data-say]');
+  if(a)addCart(+a.dataset.add);
+  if(s){const p=P.find(p=>p.id===+s.dataset.say);speak(`${p.name}. ${pd(p)}. ${money(p.price)}.`)}};
+$('items').onclick=e=>{const q=e.target.closest('[data-q]'),r=e.target.closest('[data-r]');
+  if(q){const x=cart.find(i=>i.id===+q.dataset.q);x.qty+=+q.dataset.d;if(x.qty<1)cart=cart.filter(i=>i!==x);saveCart()}
+  if(r){cart=cart.filter(i=>i.id!==+r.dataset.r);saveCart();toast(t('toast_rm'))}};
+$('cats').onclick=e=>{const b=e.target.closest('[data-cat]');if(!b)return;cat=b.dataset.cat;
+  document.querySelectorAll('[data-cat]').forEach(x=>x.setAttribute('aria-pressed',x===b));render()};
+$('sort').onchange=render;
+$('search').oninput=e=>{q=e.target.value;render()};
+$('searchForm').onsubmit=e=>{e.preventDefault();render();$('shop').scrollIntoView()};
+$('cartBtn').onclick=()=>$('cartD').showModal();
+$('a11yBtn').onclick=()=>$('aD').showModal();
+$('goPay').onclick=()=>{if(!cart.length)return toast(t('empty'));$('cartD').close();$('payD').showModal()};
+document.querySelectorAll('dialog').forEach(d=>{d.addEventListener('click',e=>{if(e.target===d)d.close()});d.querySelector('[data-close]').onclick=()=>d.close()});
+
+$('payForm').onsubmit=e=>{e.preventDefault();
+  need('oName');need('oAddr',5);fieldErr('oPhone',!$('oPhone').value.trim()?t('e_req'):(phoneOk($('oPhone').value)?'':t('e_phone')));
+  if(!firstBad(['oName','oPhone','oAddr']))return;
+  const ph=$('oPhone').value.replace(/[\s-]/g,'').replace(/^\+?254|^0/,'254');
+  $('payOk').textContent=`${t('o_ok')} ${ph}.`;cart=[];saveCart();e.target.reset();
+  setTimeout(()=>{$('payD').close();$('payOk').textContent=''},2500)};
+
+$('cForm').onsubmit=e=>{e.preventDefault();
+  need('cName');fieldErr('cPhone',!$('cPhone').value.trim()?t('e_req'):(phoneOk($('cPhone').value)?'':t('e_phone')));
+  fieldErr('cType',$('cType').value?'':t('e_req'));need('cMsg',10);
+  if(!firstBad(['cName','cPhone','cType','cMsg']))return;
+  const ref="NM-"+Math.floor(100000+Math.random()*900000);
+  const list=store.get('nm-complaints',[]);list.unshift({ref,type:$('cType').value,date:new Date().toLocaleDateString('en-KE')});
+  store.set('nm-complaints',list.slice(0,5));
+  $('cOk').textContent=`${t('c_ok')} ${ref}.`;e.target.reset();renderComplaints()};
+
+$('pImg').onchange=()=>{const f=$('pImg').files[0];
+  fieldErr('pImg',!f?t('e_req'):!/^image\/(png|jpeg|webp)$/.test(f.type)?t('e_img'):f.size>1048576?t('e_big'):'')};
+$('pForm').onsubmit=e=>{e.preventDefault();
+  need('pName');fieldErr('pCat',$('pCat').value?'':t('e_req'));fieldErr('pPrice',+$('pPrice').value>0?'':t('e_price'));need('pDesc',10);$('pImg').onchange();
+  if(!firstBad(['pName','pCat','pPrice','pDesc','pImg']))return;
+  const rd=new FileReader();rd.onload=()=>{
+    const p={id:Date.now(),name:$('pName').value.trim(),cat:$('pCat').value,price:+$('pPrice').value,old:null,rating:5,n:0,icon:'🛍️',img:rd.result,d:$('pDesc').value.trim()};
+    const saved=store.get('nm-added',[]);saved.push(p);
+    if(!store.set('nm-added',saved))return fieldErr('pImg',t('e_store'));
+    P.push(p);render();$('pOk').textContent=`${p.name} ${t('p_ok')}`;e.target.reset()};
+  rd.readAsDataURL($('pImg').files[0])};
+
+/* ---------- Init ---------- */
+$('heroImg').src=P[0].img;$('heroImg').onerror=function(){this.onerror=null;this.src=artUri('head')};
+applyA();applyI18n();
+if(A.auto)setTimeout(()=>speak(document.querySelector('h1').textContent),600);
+if('speechSynthesis' in window)speechSynthesis.onvoiceschanged=()=>{};
+</script>
+</body>
+</html>
